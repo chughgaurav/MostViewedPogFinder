@@ -1,0 +1,32 @@
+function storeInQueue(rec,pogId)
+--  if aerospike:exists(rec) then
+--    return 0
+ -- end
+
+  --else case
+if not aerospike:exists(rec) then
+  rec.messages = list()
+  aerospike:create(rec)
+end
+
+if rec[pogId] ~= nil then
+  rec[pogId] = rec[pogId]+1
+end
+
+local messages = rec.messages
+rec.messages = messages
+
+  --update val to bin
+if rec[pogId] == nil then
+  rec[pogId] = 1
+
+  --store message
+  list.append(messages, pogId )
+  rec.messages = messages
+end
+
+
+  aerospike:update(rec)
+
+  return list.size(messages)
+end

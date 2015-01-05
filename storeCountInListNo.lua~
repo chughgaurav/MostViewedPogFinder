@@ -1,0 +1,6 @@
+function storeCountInListNo(rec,listNo)
+
+
+
+  --return list.size(messages)
+end
