@@ -29,24 +29,26 @@ function storePogIdInQueue(rec,pogId)
  debug("-----------------------------------pogId- ",pogId)
  info("-----------------------------------",rec.pogIdHitStream)
 
-  if rec[pogId] ~= nil then
-    rec[pogId] = rec[pogId]+1
+local pogIdHitMap = rec.pogIdHitMap
+
+  if pogIdHitMap[pogId] ~= nil then
+    --rec[pogId] = rec[pogId]+1
+    pogIdHitMap[pogId] = pogIdHitMap[pogId]+1
+
+    rec.pogIdHitMap = pogIdHitMap
   end
 
 
   local pogIdHitStream = rec.pogIdHitStream
-  local pogIdHitMap = rec.pogIdHitMap
-
-  --pogIdHitMap = map { a = 1, b = 2, c = 3 }
 
   --initialise & add pogId entry to list / map
-  if rec[pogId] == nil then
-    rec[pogId] = 1
+  if pogIdHitMap[pogId] == nil then
     pogIdHitMap[pogId] = 1
 
+    --rec[pogId] = 1
     --list.append(pogIdHitStream, pogId)
-
     --rec.pogIdHitStream = pogIdHitStream
+
     rec.pogIdHitMap = pogIdHitMap
   end
 
