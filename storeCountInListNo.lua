@@ -2,64 +2,63 @@ function storeCountInListNo(rec,listNo)
  
 local myVal2 = ""
 
+if(rec.pogIdHitMap == nil)
+  then
+  myVal2 = "------------pogIdHitMap is nil---------------------"
+  if not aerospike:exists(rec) then
+    rec.pogIdHitMap = map()
+    aerospike:create(rec)
+    myVal2 = myVal2.."------------rec & pogIdHitMap created---------------------"
+  else
+    rec.pogIdHitMap = map()
+    aerospike:update(rec)
+    myVal2 = myVal2.."------------pogIdHitMap created---------------------"
+  end
+  --return myVal2
+end
+
 local pogIdHitMap = rec.pogIdHitMap
 
-for value in map.keys(pogIdHitMap) do
-   myVal2 = myVal2..value.." "
-end
 
-myVal2 = myVal2.."..eof"
-
-for value in map.values(pogIdHitMap) do
-   myVal2 = myVal2..value.." "
-end
-
-myVal2 = myVal2.."..eof"
-
-  
-
-if(rec.listT1 == nil)
+if(rec["pogMapT"..listNo] == nil)
   then
-  rec.listT1 = list()
+  rec["pogMapT"..listNo] = map()
   aerospike:create(rec)
-  --aerospike:update(rec)
+
 end
 
-myVal2 ="----------------------->  "
-
-if(rec.listT1 == nil)
+if(rec.pogMapTBase == nil)
   then
-  rec.listT1 = list()
-  aerospike:create(rec)
-  --aerospike:update(rec)
+    if(map.size(pogIdHitMap)>=1) then
+      --initialising base copy of pogHits
+      rec.pogMapTBase = map()
+      aerospike:update(rec)
+      --aerospike:create(rec)
+      rec.pogMapTBase = map.clone(pogIdHitMap)
+      myVal2 = myVal2.."................pogIdHitMap >= 1.............................."
+    end
+else
+  local currentHits = map.clone(pogIdHitMap)
+  local pogMapTn = map()
+  local pogMapTBase = rec.pogMapTBase
+
+  for key in map.keys(currentHits) do
+    if(pogMapTBase[key] ~= nil) then
+        pogMapTn[key] = currentHits[key]-pogMapTBase[key]
+        myVal2 = myVal2.."-------------------Not NIL-----------"
+    else
+        pogMapTn[key] = currentHits[key]
+        myVal2 = myVal2.. "-------------------IS NIL-----------"
+    end
+    myVal2 =  myVal2.."----------------after copy-----------------Yes"
+  end
+  rec["pogMapT"..listNo] = pogMapTn
 end
+aerospike:update(rec)
 
-if(rec.pogMapT0 == nil)
-  then
-  rec.pogMapT0 = map()
-  aerospike:create(rec)
-  --aerospike:update(rec)
-  local pogMapT0 = map.clone(pogIdHitMap)
-end
+myVal2 =  myVal2.."----------------after copy-----------------Yes"
 
-        if(listNo==1) then
-            --rec.listT1 = list()
-            --aerospike:create(rec)
-                local  listT1 = rec.listT1
-                  for value in map.keys(pogIdHitMap) do 
-                      list.append(listT1,value)
-                  end
-                  rec.listT1 = listT1
-        else
-            rec.listT2 = list()
-          	local  listT2 = rec.listT2
-            --store message
-            list.append(listT2, "pogId" )
-            rec.listT2 = listT2
-        end
-        
-    --end
-
+---------------------update   baseCopy = currentCopy
   aerospike:update(rec)
 
   return myVal2
