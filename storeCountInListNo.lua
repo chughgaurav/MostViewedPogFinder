@@ -24,15 +24,15 @@ if(rec["pogMapT"..listNo] == nil)
   then
   rec["pogMapT"..listNo] = map()
   aerospike:create(rec)
-
 end
 
 if(rec.pogMapTBase == nil)
   then
+    myVal2 = "------------pogMapTBase is nil---------------------"
+    --initialising base copy of pogHits
+    rec.pogMapTBase = map()
+    aerospike:update(rec)
     if(map.size(pogIdHitMap)>=1) then
-      --initialising base copy of pogHits
-      rec.pogMapTBase = map()
-      aerospike:update(rec)
       --aerospike:create(rec)
       rec.pogMapTBase = map.clone(pogIdHitMap)
       myVal2 = myVal2.."................pogIdHitMap >= 1.............................."
@@ -53,10 +53,11 @@ else
     myVal2 =  myVal2.."----------------after copy-----------------Yes"
   end
   rec["pogMapT"..listNo] = pogMapTn
+  rec.pogMapTBase = currentHits
 end
 aerospike:update(rec)
 
-myVal2 =  myVal2.."----------------after copy-----------------Yes"
+myVal2 =  myVal2.."----------------after copy-----------------Yes2"
 
 ---------------------update   baseCopy = currentCopy
   aerospike:update(rec)
