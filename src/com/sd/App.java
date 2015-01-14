@@ -24,6 +24,29 @@ import com.aerospike.client.policy.WritePolicy;
 public class App 
 {
 	public static int counter=1,counter2=0;
+
+	private App(){
+        AerospikeClient client = new AerospikeClient("127.0.0.1", 3000);
+        
+        /*
+        try{
+        	// Initialize policy.
+        	WritePolicy writePolicy = new WritePolicy();
+        	writePolicy.timeout = 500;  // 50 millisecond timeout.
+        	Key key = new Key("test", "demo2", "pogIdList");
+            
+            client.delete(writePolicy, key);
+            System.out.println("clearing database");
+        	
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally {
+            client.close();
+        }
+        */
+	}
 	
     public static void main( String[] args )
     {
@@ -66,6 +89,8 @@ public class App
         	String result = String.valueOf(
         			client.execute(writePolicy, key, "storePogIdInQueue", "storePogIdInQueue",Value.get(pogId))
         			);
+        	
+        	System.out.println("result: " + result);
         	
         	// Read a single value.
         	Record record = client.get(writePolicy, key, pogId);            

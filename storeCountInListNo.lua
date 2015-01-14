@@ -35,6 +35,7 @@ if(rec.pogMapTBase == nil)
     if(map.size(pogIdHitMap)>=1) then
       --aerospike:create(rec)
       rec.pogMapTBase = map.clone(pogIdHitMap)
+      rec["pogMapT"..listNo] = map.clone(pogIdHitMap)
       myVal2 = myVal2.."................pogIdHitMap >= 1.............................."
     end
 else

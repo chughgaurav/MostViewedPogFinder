@@ -21,6 +21,8 @@ public class RollingStore {
 	public static void main(String args[]){	
 		RollingStore obj = new RollingStore();
 		
+		//clear values of pogMapT1...pogMapT5 at startup (if they exist), but not of pogIdHitMap
+		
 		while(true){
 			try {
 				if(obj.counter>=5)
@@ -38,6 +40,7 @@ public class RollingStore {
 	}
 	
 	public void processPogListData(int listNo){
+		System.out.println("listNo - "+listNo);
 		//stores into time based keys, at t[i] --> puts data to key[i]
         AerospikeClient client = new AerospikeClient("127.0.0.1", 3000);
         
@@ -48,7 +51,12 @@ public class RollingStore {
 
         	Key key = new Key("test", "demo2", "pogIdList");
         	
-        	 // Read multiple values.
+        	String result = String.valueOf(
+        			client.execute(writePolicy, key, "storeCountInListNo", "storeCountInListNo", Value.get(listNo))
+        			);
+        	System.out.println("hello- "+result);
+        	
+        	// Read multiple values.
         	Record record = client.get(writePolicy, key);
  
             if (record != null) {
@@ -62,13 +70,11 @@ public class RollingStore {
         			client.execute(writePolicy, key, "examples", "readBin", Value.get("pogId1"))
         			);
         			*/
-            String result = String.valueOf(
-        			client.execute(writePolicy, key, "storeCountInListNo", "storeCountInListNo", Value.get(listNo))
-        			);
-        	System.out.println("hello- "+result);
+        	
+        	System.out.println("TODO - Try to take snapshot");
             
             // Delete record.
-            client.delete(writePolicy, key);
+            //client.delete(writePolicy, key);
         	
         }
         catch(Exception e){
