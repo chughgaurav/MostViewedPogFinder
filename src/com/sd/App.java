@@ -24,9 +24,10 @@ import com.aerospike.client.policy.WritePolicy;
 public class App 
 {
 	public static int counter=1,counter2=0;
+	private AerospikeClient client;
 
 	private App(){
-        AerospikeClient client = new AerospikeClient("127.0.0.1", 3000);
+		client = new AerospikeClient("127.0.0.1", 3000);
         
         /*
         try{
@@ -69,10 +70,12 @@ public class App
         }
         */
         
+        obj.client.close();
+        
     }
     
     public void storePogIdToAerospike(String pogId){
-        AerospikeClient client = new AerospikeClient("127.0.0.1", 3000);
+        //AerospikeClient client = new AerospikeClient("127.0.0.1", 3000);
 
         try{
         	// Initialize policy.
@@ -80,7 +83,7 @@ public class App
         	writePolicy.timeout = 500;  // 50 millisecond timeout.
 
         	Key key = new Key("test", "demo2", "pogIdList");
-        	Bin bin1 = new Bin(pogId, 1);
+        	//Bin bin1 = new Bin(pogId, 1);
         	//client.put(writePolicy, key, bin1);
         	
         	//add updates value
@@ -104,7 +107,7 @@ public class App
         	e.printStackTrace();
         }
         finally {
-            client.close();
+            //client.close();
             System.out.println("exiting.....");
         }
 	}

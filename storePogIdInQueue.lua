@@ -1,8 +1,12 @@
 function storePogIdInQueue(rec,pogId)
+
+  local debugMsg = "-----------------"
+
   if not aerospike:exists(rec) then
     rec.pogIdHitStream = list()
     rec.pogIdHitMap = map()
     aerospike:create(rec)
+    debugMsg = "\n"..debugMsg.."rec didn't exist"
   end
 
 
@@ -11,7 +15,7 @@ function storePogIdInQueue(rec,pogId)
     if aerospike:exists(rec) then
       rec.pogIdHitStream = list()
       aerospike:update(rec)
-      return "pogIdHitStream is nil"
+      debugMsg = "\n"..debugMsg.."pogIdHitStream was null"
     end
   end
 
@@ -20,7 +24,7 @@ function storePogIdInQueue(rec,pogId)
     if aerospike:exists(rec) then
       rec.pogIdHitMap = map()
       aerospike:update(rec)
-      return "pogIdHitMap is nil"
+      debugMsg = "\n"..debugMsg.."pogIdHitMap was nil"
     end
   end
 
@@ -36,6 +40,7 @@ local pogIdHitMap = rec.pogIdHitMap
     pogIdHitMap[pogId] = pogIdHitMap[pogId]+1
 
     rec.pogIdHitMap = pogIdHitMap
+    debugMsg = "\n"..debugMsg.."pogIdHitMap["..pogId.."] +1"
   end
 
 
@@ -50,10 +55,11 @@ local pogIdHitMap = rec.pogIdHitMap
     --rec.pogIdHitStream = pogIdHitStream
 
     rec.pogIdHitMap = pogIdHitMap
+    debugMsg = "\n"..debugMsg.."pogIdHitMap["..pogId.."] =1"
   end
 
   aerospike:update(rec)
 
 
-  --return list.size(pogIdHitStream)
+  return debugMsg
 end
