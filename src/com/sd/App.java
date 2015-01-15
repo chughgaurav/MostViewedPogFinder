@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -56,6 +57,7 @@ public class App
         for(int i =1;i<10;i++){
         	obj.storePogIdToAerospike("pogId"+i);
         }
+        
         //obj.storePogIdToAerospike("pogId");
         
         //obj.getCounter();
@@ -89,8 +91,12 @@ public class App
         	//add updates value
         	//client.add(writePolicy, key, bin1);
         	
+            /*remove random no */
+        	Random ran = new Random();
+            int randomNo = ran.nextInt(6) + 5;
+        	
         	String result = String.valueOf(
-        			client.execute(writePolicy, key, "storePogIdInQueue", "storePogIdInQueue",Value.get(pogId))
+        			client.execute(writePolicy, key, "storePogIdInQueue", "storePogIdInQueue",Value.get(pogId),Value.get(randomNo))
         			);
         	
         	System.out.println("result: " + result);

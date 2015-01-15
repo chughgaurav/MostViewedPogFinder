@@ -5,6 +5,8 @@ function querySystem(rec)
 	local hitsAvgMap = map()
 	local pogMapsTn = map()
 
+	local highestHit = {}
+
 	if(pogIdHitMap == nil) then
 		debugMsg = debugMsg.."no hits found"
 	else
@@ -21,17 +23,29 @@ function querySystem(rec)
 		local map9 = pogMapsTn["pogMapT1"]
 
 		for key in map.keys(pogIdHitMap) do
-			--hitsAvgMap[key] = pogMapsTn["pogMapT1"][key] + pogMapsTn["pogMapT2"][key] + pogMapsTn["pogMapT3"][key] + pogMapsTn["pogMapT4"][key] + pogMapsTn["pogMapT5"][key]
+			hitsAvgMap[key] = pogMapsTn["pogMapT1"][key] + pogMapsTn["pogMapT2"][key] + pogMapsTn["pogMapT3"][key] + pogMapsTn["pogMapT4"][key] + pogMapsTn["pogMapT5"][key]
+			if(highestHit[1] == nil) then
+				highestHit[1] = hitsAvgMap[key]
+			else
+				if(highestHit[1] < hitsAvgMap[key]) then
+					highestHit[1] = hitsAvgMap[key]
+				end
+			end
 			
-			hitsAvgMap[key] = pogMapsTn["pogMapT1"][key]
+			--hitsAvgMap[key] = pogMapsTn["pogMapT1"][key]
 			debugMsg = debugMsg.." "..hitsAvgMap[key]
 		end
 	end
 
-	local map9 = pogMapsTn["pogMapT1"]
+	
+	--local map9 = table.sort.sort(hitsAvgMap)
 
-	for key in map.keys(map9) do
-		--debugMsg = debugMsg.." "..key
+	for key,value in map.pairs(hitsAvgMap) do
+		debugMsg = debugMsg.." "..key.."- "..value
+	end
+
+	for key,value in pairs(highestHit) do
+		debugMsg = debugMsg.." highestHit key-"..key.." value - "..value
 	end
 
 	return debugMsg

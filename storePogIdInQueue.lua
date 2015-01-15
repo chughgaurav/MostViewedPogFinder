@@ -1,4 +1,4 @@
-function storePogIdInQueue(rec,pogId)
+function storePogIdInQueue(rec,pogId,randNo)
 
   local debugMsg = "-----------------"
 
@@ -37,7 +37,7 @@ local pogIdHitMap = rec.pogIdHitMap
 
   if pogIdHitMap[pogId] ~= nil then
     --rec[pogId] = rec[pogId]+1
-    pogIdHitMap[pogId] = pogIdHitMap[pogId]+1
+    pogIdHitMap[pogId] = pogIdHitMap[pogId]+1+randNo
 
     rec.pogIdHitMap = pogIdHitMap
     debugMsg = "\n"..debugMsg.."pogIdHitMap["..pogId.."] +1"
