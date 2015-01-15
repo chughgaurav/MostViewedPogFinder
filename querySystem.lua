@@ -24,7 +24,7 @@ function querySystem(rec)
 
 		for key in map.keys(pogIdHitMap) do
 			hitsAvgMap[key] = pogMapsTn["pogMapT1"][key] + pogMapsTn["pogMapT2"][key] + pogMapsTn["pogMapT3"][key] + pogMapsTn["pogMapT4"][key] + pogMapsTn["pogMapT5"][key]
-			--hitsAvgMap[key] = pogMapsTn["pogMapT1"][key]
+			hitsAvgMap[key] = string.format("%1.1f",hitsAvgMap[key] / 5)
 			debugMsg = debugMsg.." "..hitsAvgMap[key]
 		end
 	end
