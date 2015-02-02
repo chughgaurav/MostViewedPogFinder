@@ -75,6 +75,7 @@ public class RollingStore {
             
             // Delete record.
             //client.delete(writePolicy, key);
+        	//client.dropIndex(writePolicy, "test", "demo2", "pogMapT1");
         	
         }
         catch(Exception e){
